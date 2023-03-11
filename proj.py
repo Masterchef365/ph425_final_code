@@ -41,6 +41,12 @@ q = 1.
 m = 1.
 h = 1.
 
+# B-field
+def b_field(t):
+    # B_0 = 1
+    return np.cos(w * t)
+
+
 # Define state with respect to time
 def psi(t):
     f = 1j*q/(m*h*w) * sin(w * t)
@@ -56,25 +62,27 @@ def prob_for_all_t(t_vals, u):
     return np.array([prob(psi(t), u) for t in t_vals])
 
 
-time_varaying_sz_prob = prob_for_all_t(t_vals, sz_pos)
-time_varaying_sy_prob = prob_for_all_t(t_vals, sy_pos)
-time_varaying_sx_prob = prob_for_all_t(t_vals, sx_pos)
+time_varying_sz_prob = prob_for_all_t(t_vals, sz_pos)
+time_varying_sy_prob = prob_for_all_t(t_vals, sy_pos)
+time_varying_sx_prob = prob_for_all_t(t_vals, sx_pos)
+time_varying_b_field = b_field(t_vals)
 
-# time_varaying_sz_prob_neg = prob_for_all_t(t_vals, sz_neg)
-# time_varaying_sy_prob_neg = prob_for_all_t(t_vals, sy_neg)
-# time_varaying_sx_prob_neg = prob_for_all_t(t_vals, sx_neg)
+# time_varying_sz_prob_neg = prob_for_all_t(t_vals, sz_neg)
+# time_varying_sy_prob_neg = prob_for_all_t(t_vals, sy_neg)
+# time_varying_sx_prob_neg = prob_for_all_t(t_vals, sx_neg)
 # 
-# print(time_varaying_sz_prob + time_varaying_sz_prob_neg)
-# print(time_varaying_sy_prob + time_varaying_sy_prob_neg)
-# print(time_varaying_sx_prob + time_varaying_sx_prob_neg)
+# print(time_varying_sz_prob + time_varying_sz_prob_neg)
+# print(time_varying_sy_prob + time_varying_sy_prob_neg)
+# print(time_varying_sx_prob + time_varying_sx_prob_neg)
 
 
 
 # Create the plot
 fig, ax = plt.subplots()
-ax.plot(t_vals, time_varaying_sz_prob, color='blue', label='P(S_z = +h/2)')
-ax.plot(t_vals, time_varaying_sy_prob, color='green', label='P(S_y = +h/2)')
-ax.plot(t_vals, time_varaying_sx_prob, color='red', label='P(S_x = +h/2)')
+ax.plot(t_vals, time_varying_sz_prob, color='blue', label='P(S_z = +h/2)')
+ax.plot(t_vals, time_varying_sy_prob, color='green', label='P(S_y = +h/2)')
+ax.plot(t_vals, time_varying_sx_prob, color='red', label='P(S_x = +h/2)')
+ax.plot(t_vals, time_varying_b_field, color='black', label='B-field')
 ax.set_xlabel('Time (seconds)')
 ax.set_ylabel('Probability')
 ax.set_title('Measurement probabilities')
