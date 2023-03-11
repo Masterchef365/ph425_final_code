@@ -95,64 +95,29 @@ def expect_for_all_t(t_vals, op, psi):
 def uncertainty_for_all_t(t_vals, op, psi):
     return np.array([uncertainty(op, psi(t)) for t in t_vals])
 
-
-time_varying_sz_prob = prob_for_all_t(t_vals, sz_pos, psi)
-time_varying_sy_prob = prob_for_all_t(t_vals, sy_pos, psi)
-time_varying_sx_prob = prob_for_all_t(t_vals, sx_pos, psi)
-
-time_varying_sz_expect = expect_for_all_t(t_vals, s_z, psi)
-time_varying_sy_expect = expect_for_all_t(t_vals, s_y, psi)
-time_varying_sx_expect = expect_for_all_t(t_vals, s_x, psi)
-
-time_varying_sz_uncertain = uncertainty_for_all_t(t_vals, s_z, psi)
-time_varying_sy_uncertain = uncertainty_for_all_t(t_vals, s_y, psi)
-time_varying_sx_uncertain = uncertainty_for_all_t(t_vals, s_x, psi)
-
+# Create the plot
+plots = [
+    (sz_neg, sz_pos, s_z, 'z'),
+    (sy_neg, sy_pos, s_y, 'y'),
+    (sx_neg, sx_pos, s_x, 'x'),
+]
 
 time_varying_b_field = b_field(t_vals)
 
-# time_varying_sz_prob_neg = prob_for_all_t(t_vals, sz_neg)
-# time_varying_sy_prob_neg = prob_for_all_t(t_vals, sy_neg)
-# time_varying_sx_prob_neg = prob_for_all_t(t_vals, sx_neg)
-# 
-# print(time_varying_sz_prob + time_varying_sz_prob_neg)
-# print(time_varying_sy_prob + time_varying_sy_prob_neg)
-# print(time_varying_sx_prob + time_varying_sx_prob_neg)
+for (neg, pos, op, name) in plots:
+    tvar_prob = prob_for_all_t(t_vals, pos, psi)
+    tvar_expect = expect_for_all_t(t_vals, op, psi)
+    tvar_uncertain = uncertainty_for_all_t(t_vals, op, psi)
 
-
-
-# # Create the plot
-# fig, ax = plt.subplots()
-# ax.plot(t_vals, time_varying_sz_prob, color='blue', label='P(S_z = +h/2)')
-# ax.plot(t_vals, time_varying_sy_prob, color='green', label='P(S_y = +h/2)')
-# ax.plot(t_vals, time_varying_sx_prob, color='red', label='P(S_x = +h/2)')
-# ax.plot(t_vals, time_varying_b_field, color='black', label='B-field')
-# ax.set_xlabel('Time (seconds)')
-# ax.set_ylabel('Probability')
-# ax.set_title('Measurement probabilities')
-# ax.legend()
-
-# # Create the plot
-# fig, ax = plt.subplots()
-# ax.plot(t_vals, time_varying_sz_expect, color='blue', label='S_z')
-# ax.plot(t_vals, time_varying_sy_expect, color='green', label='S_y')
-# ax.plot(t_vals, time_varying_sx_expect, color='red', label='S_x')
-# ax.plot(t_vals, time_varying_b_field, color='black', label='B-field')
-# ax.set_xlabel('Time (seconds)')
-# ax.set_ylabel('Probability')
-# ax.set_title('Measurement expectations')
-# ax.legend()
-
-# Create the plot
-fig, ax = plt.subplots()
-ax.plot(t_vals, time_varying_sz_uncertain, color='blue', label='S_z')
-ax.plot(t_vals, time_varying_sy_uncertain, color='green', label='S_y')
-ax.plot(t_vals, time_varying_sx_uncertain, color='red', label='S_x')
-ax.plot(t_vals, time_varying_b_field, color='black', label='B-field')
-ax.set_xlabel('Time (seconds)')
-ax.set_ylabel('Probability')
-ax.set_title('Measurement expectations')
-ax.legend()
+    fig, ax = plt.subplots()
+    ax.plot(t_vals, tvar_prob, color='blue', label='P(+hbar/2)')
+    ax.plot(t_vals, tvar_uncertain, color='green', label='Uncertainty')
+    ax.plot(t_vals, tvar_expect, color='red', label='Expectation')
+    ax.plot(t_vals, time_varying_b_field, color='black', label='B-field')
+    ax.set_xlabel('Time (seconds)')
+    ax.set_ylabel('Magnitude')
+    ax.set_title(f'Measurement expectations ({name})')
+    ax.legend()
 
 
 
