@@ -21,6 +21,16 @@ def expected_val(op, psi):
     return braket(psi, np.dot(op, psi))
 
 
+def uncertainty(op, psi):
+    mu = expected_val(op, psi)
+    op2 = np.dot(op, op)
+    v = expected_val(op2, psi)
+    k = v - mu**2
+    assert(k.imag == 0.0)
+    return sqrt(k.real)
+
+
+
 # Define particle properties
 w = 1.     # B-field oscillation rate
 q = 1.     # Particle charge
@@ -82,6 +92,10 @@ def expect_for_all_t(t_vals, op, psi):
     return np.array([expected_val(op, psi(t)) for t in t_vals])
 
 
+def uncertainty_for_all_t(t_vals, op, psi):
+    return np.array([uncertainty(op, psi(t)) for t in t_vals])
+
+
 time_varying_sz_prob = prob_for_all_t(t_vals, sz_pos, psi)
 time_varying_sy_prob = prob_for_all_t(t_vals, sy_pos, psi)
 time_varying_sx_prob = prob_for_all_t(t_vals, sx_pos, psi)
@@ -89,6 +103,11 @@ time_varying_sx_prob = prob_for_all_t(t_vals, sx_pos, psi)
 time_varying_sz_expect = expect_for_all_t(t_vals, s_z, psi)
 time_varying_sy_expect = expect_for_all_t(t_vals, s_y, psi)
 time_varying_sx_expect = expect_for_all_t(t_vals, s_x, psi)
+
+time_varying_sz_uncertain = uncertainty_for_all_t(t_vals, s_z, psi)
+time_varying_sy_uncertain = uncertainty_for_all_t(t_vals, s_y, psi)
+time_varying_sx_uncertain = uncertainty_for_all_t(t_vals, s_x, psi)
+
 
 time_varying_b_field = b_field(t_vals)
 
@@ -113,16 +132,28 @@ time_varying_b_field = b_field(t_vals)
 # ax.set_title('Measurement probabilities')
 # ax.legend()
 
+# # Create the plot
+# fig, ax = plt.subplots()
+# ax.plot(t_vals, time_varying_sz_expect, color='blue', label='S_z')
+# ax.plot(t_vals, time_varying_sy_expect, color='green', label='S_y')
+# ax.plot(t_vals, time_varying_sx_expect, color='red', label='S_x')
+# ax.plot(t_vals, time_varying_b_field, color='black', label='B-field')
+# ax.set_xlabel('Time (seconds)')
+# ax.set_ylabel('Probability')
+# ax.set_title('Measurement expectations')
+# ax.legend()
+
 # Create the plot
 fig, ax = plt.subplots()
-ax.plot(t_vals, time_varying_sz_expect, color='blue', label='P(S_z = +h/2)')
-ax.plot(t_vals, time_varying_sy_expect, color='green', label='P(S_y = +h/2)')
-ax.plot(t_vals, time_varying_sx_expect, color='red', label='P(S_x = +h/2)')
+ax.plot(t_vals, time_varying_sz_uncertain, color='blue', label='S_z')
+ax.plot(t_vals, time_varying_sy_uncertain, color='green', label='S_y')
+ax.plot(t_vals, time_varying_sx_uncertain, color='red', label='S_x')
 ax.plot(t_vals, time_varying_b_field, color='black', label='B-field')
 ax.set_xlabel('Time (seconds)')
 ax.set_ylabel('Probability')
-ax.set_title('Measurement probabilities')
+ax.set_title('Measurement expectations')
 ax.legend()
+
 
 
 plt.show()
