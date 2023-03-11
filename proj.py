@@ -72,11 +72,12 @@ time_varaying_sx_prob = prob_for_all_t(t_vals, sx_pos)
 
 # Create the plot
 fig, ax = plt.subplots()
-ax.plot(t_vals, time_varaying_sz_prob, color='blue')
-ax.plot(t_vals, time_varaying_sy_prob, color='green')
-ax.plot(t_vals, time_varaying_sx_prob, color='red')
+ax.plot(t_vals, time_varaying_sz_prob, color='blue', label='P(S_z = +h/2)')
+ax.plot(t_vals, time_varaying_sy_prob, color='green', label='P(S_y = +h/2)')
+ax.plot(t_vals, time_varaying_sx_prob, color='red', label='P(S_x = +h/2)')
 ax.set_xlabel('Time (seconds)')
-ax.set_ylabel('Probability (+Z)')
-ax.set_title('Probability of measuring S_y = +hbar/2')
+ax.set_ylabel('Probability')
+ax.set_title('Measurement probabilities')
+ax.legend()
 
 plt.show()
