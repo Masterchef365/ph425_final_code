@@ -106,11 +106,13 @@ time_varying_b_field = b_field(t_vals)
 
 for (neg, pos, op, name) in plots:
     tvar_prob = prob_for_all_t(t_vals, pos, psi)
+    tvar_prob_neg = prob_for_all_t(t_vals, neg, psi)
     tvar_expect = expect_for_all_t(t_vals, op, psi)
     tvar_uncertain = uncertainty_for_all_t(t_vals, op, psi)
 
     fig, ax = plt.subplots()
     ax.plot(t_vals, tvar_prob, color='blue', label='P(+hbar/2)')
+    ax.plot(t_vals, tvar_prob_neg, color='purple', label='P(-hbar/2)')
     ax.plot(t_vals, tvar_uncertain, color='green', label='Uncertainty')
     ax.plot(t_vals, tvar_expect, color='red', label='Expectation')
     ax.plot(t_vals, time_varying_b_field, color='black', label='B-field')
