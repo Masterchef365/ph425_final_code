@@ -2,25 +2,29 @@ import numpy as np
 from math import sqrt, cos, sin, radians, atan2, acos, degrees, e
 import matplotlib.pyplot as plt
 
+# Calculates the <u|v>
 def braket(u, v):
     return np.dot(u.conj(), v)
 
 
+# Calculates |<u|v>|^2
 def prob(u, v):
     return abs(braket(u, v))**2
 
 
+# Normalizes the given ket
 def normalize(v):
     norm = np.linalg.norm(v)
     if norm == 0:
         norm = np.finfo(v.dtype).eps
     return v/norm
 
-
+# Calculates <psi|op|psi>
 def expected_val(op, psi):
     return braket(psi, np.dot(op, psi))
 
 
+# Calculates sqrt(<psi|op^2|psi> - <psi|op|psi>^2)
 def uncertainty(op, psi):
     mu = expected_val(op, psi)
     op2 = np.dot(op, op)
@@ -120,7 +124,6 @@ for (neg, pos, op, name) in plots:
     ax.set_ylabel('Magnitude')
     ax.set_title(f'Measurement expectations ({name})')
     ax.legend()
-
 
 
 plt.show()
